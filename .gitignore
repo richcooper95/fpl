@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+*.xml
+.coverage
+.hypothesis
+.mypy_cache
+.pytest_cache
+.vscode
+coverage
+venv

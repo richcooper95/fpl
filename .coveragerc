@@ -1,0 +1,5 @@
+[run]
+source = fpl
+omit =
+    fpl/test/*
+    fpl/__*__.py

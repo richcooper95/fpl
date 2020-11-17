@@ -1,0 +1,10 @@
+mypy
+black
+pylint
+pytest
+coverage
+requests
+streamlit
+numpy
+pandas
+typing

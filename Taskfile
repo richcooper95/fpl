@@ -1,0 +1,90 @@
+#!/bin/bash
+
+#
+# Create virtualenv and install dependencies
+#
+function venv {
+    rm -rf venv
+    /usr/cisco/bin/python3.6 -m venv venv
+    venv/bin/pip install --upgrade pip
+    venv/bin/pip install -r requirements.txt
+}
+
+#
+# Lint the codebase
+#
+function lint {
+    venv/bin/pylint fpl
+}
+
+#
+# Typecheck the codebase
+#
+function type {
+    venv/bin/mypy -p fpl
+}
+
+#
+# Run unit tests
+#
+function ut {
+    venv/bin/coverage erase
+    venv/bin/coverage run -m pytest fpl/test/ut --junitxml=results-ut.xml "$@"
+    venv/bin/coverage report
+    venv/bin/coverage xml -o coverage-ut.xml
+    venv/bin/coverage annotate -d coverage
+}
+
+#
+# Run integration tests
+#
+function it {
+    venv/bin/coverage erase
+    venv/bin/coverage run -m pytest fpl/test/it --junitxml=results-it.xml "$@"
+    venv/bin/coverage report
+    venv/bin/coverage xml -o coverage-it.xml
+    venv/bin/coverage annotate -d coverage
+}
+
+#
+# Run all tests
+#
+function test {
+    venv/bin/coverage erase
+    venv/bin/coverage run -m pytest fpl/test "$@"
+    venv/bin/coverage report
+    venv/bin/coverage annotate -d coverage
+}
+
+#
+# Auto-format the codebase
+#
+function fmt {
+    venv/bin/black $(find fpl -name "*.py") "$@"
+}
+
+#
+# Start the app
+#
+function start {
+    venv/bin/python3 fpl # possibly don't need the python3 if it's a package?
+}
+
+#
+# Help - list available tasks
+#
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+}
+
+#
+# Default to help output
+#
+function default {
+    help
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time ${@:-default}
