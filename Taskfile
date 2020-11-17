@@ -67,7 +67,7 @@ function fmt {
 # Start the app
 #
 function start {
-    venv/bin/python3 fpl # possibly don't need the python3 if it's a package?
+    venv/bin/streamlit run fpl/fpl_app.py
 }
 
 #
